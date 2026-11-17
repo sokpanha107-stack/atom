@@ -60,6 +60,10 @@ function RadarDisplay() {
           <rect x={x - 3.2} y={bodyTop} width="6.4" height={bodyHeight} fill={color}/>
         </g>
       })}
+      <line x1="18" y1="174" x2="342" y2="174" stroke="#ff5968" strokeWidth="1.8" strokeDasharray="1 5" strokeLinecap="round"/>
+      <line x1="18" y1="186" x2="342" y2="186" stroke="#46f596" strokeWidth="1.8" strokeDasharray="1 5" strokeLinecap="round"/>
+      <text x="238" y="170" fill="#ff7781" fontSize="7" fontFamily="monospace" letterSpacing=".8" paintOrder="stroke" stroke="#090d0c" strokeWidth="3">ASK 2,598.47</text>
+      <text x="238" y="196" fill="#5af5a2" fontSize="7" fontFamily="monospace" letterSpacing=".8" paintOrder="stroke" stroke="#090d0c" strokeWidth="3">BID 2,598.37</text>
     </svg>
     <svg viewBox="0 0 360 360" className="radar-scope absolute inset-0 h-full w-full" aria-hidden="true">
       <circle cx="180" cy="180" r="48"/><circle cx="180" cy="180" r="96"/><circle cx="180" cy="180" r="144"/>
