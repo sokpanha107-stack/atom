@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Activity, ArrowDownRight, ArrowUpRight, Bell, ChevronDown, Command, Eye, EyeOff, Gauge, Globe2, Moon, Radar, Settings, Shield, Sun, Terminal, Vault, X, Zap } from 'lucide-react'
+import { Activity, ArrowDownRight, ArrowUpRight, Bell, ChevronDown, Command, Eye, Gauge, Globe2, Moon, Radar, Settings, Shield, Sun, Vault, X, Zap } from 'lucide-react'
 
 type View = 'War Room' | 'Rule Engine' | 'The Vault' | 'System Health' | 'Settings'
 
@@ -14,35 +14,73 @@ const navItems: { label: View; icon: typeof Radar }[] = [
 ]
 
 const alerts = [
-  { bank: 'JPMORGAN', type: 'BUY LIMIT', amount: '$100.0M', price: '$2,600.00', time: '14:32:08.421', side: 'buy' },
-  { bank: 'GOLDMAN SACHS', type: 'SELL STOP', amount: '$42.5M', price: '$2,594.50', time: '14:31:54.087', side: 'sell' },
-  { bank: 'CITADEL SEC.', type: 'BUY LIMIT', amount: '$18.2M', price: '$2,588.00', time: '14:31:32.619', side: 'buy' },
-  { bank: 'MORGAN STANLEY', type: 'SELL LIMIT', amount: '$64.0M', price: '$2,603.25', time: '14:30:48.201', side: 'sell' },
-  { bank: 'DEUTSCHE BANK', type: 'BUY STOP', amount: '$31.8M', price: '$2,581.75', time: '14:30:12.903', side: 'buy' },
+  { bank: 'JPMORGAN', type: 'BUY LIMIT', amount: '$100.0M', price: '$2,600.00', time: '14:32:08.421', side: 'buy', khmer: 'ទើបតែដាក់ជញ្ជាំងទិញ' },
+  { bank: 'GOLDMAN SACHS', type: 'SELL STOP', amount: '$42.5M', price: '$2,594.50', time: '14:31:54.087', side: 'sell', khmer: 'ទើបតែដាក់បញ្ជាលក់' },
+  { bank: 'CITADEL SEC.', type: 'BUY LIMIT', amount: '$18.2M', price: '$2,588.00', time: '14:31:32.619', side: 'buy', khmer: 'ទើបតែដាក់ជញ្ជាំងទិញ' },
+  { bank: 'MORGAN STANLEY', type: 'SELL LIMIT', amount: '$64.0M', price: '$2,603.25', time: '14:30:48.201', side: 'sell', khmer: 'ទើបតែដាក់បញ្ជាលក់' },
+  { bank: 'DEUTSCHE BANK', type: 'BUY STOP', amount: '$31.8M', price: '$2,581.75', time: '14:30:12.903', side: 'buy', khmer: 'ទើបតែដាក់ជញ្ជាំងទិញ' },
 ]
 
 function AtomMark() {
   return <svg aria-hidden="true" viewBox="0 0 40 40" className="size-9"><circle cx="20" cy="20" r="2.2" fill="currentColor"/><ellipse cx="20" cy="20" rx="17" ry="6.5" fill="none" stroke="currentColor" strokeWidth="1.2"/><ellipse cx="20" cy="20" rx="17" ry="6.5" fill="none" stroke="currentColor" strokeWidth="1.2" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="17" ry="6.5" fill="none" stroke="currentColor" strokeWidth="1.2" transform="rotate(120 20 20)"/></svg>
 }
 
+function SignalMark() {
+  return <svg aria-hidden="true" viewBox="0 0 40 40" className="signal-mark">
+    <ellipse cx="20" cy="20" rx="17" ry="6.5" fill="none" stroke="currentColor" strokeWidth="1.1" transform="rotate(-55 20 20)"/>
+    <ellipse cx="20" cy="20" rx="17" ry="6.5" fill="none" stroke="currentColor" strokeWidth="1.1" transform="rotate(55 20 20)"/>
+    <circle cx="20" cy="20" r="2.2" fill="currentColor"/>
+    <path d="M11 28 19 19 22 22 31 11M24 11h7v7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="square" strokeLinejoin="miter"/>
+    <path d="M20 10v4M16 7v5M24 7v5" fill="none" stroke="currentColor" strokeWidth="1"/>
+  </svg>
+}
+
+const radarCandles = [
+  [25, 228, 194, 240, 182], [39, 196, 211, 188, 224], [53, 210, 181, 220, 172],
+  [67, 181, 194, 170, 205], [81, 194, 162, 202, 154], [95, 163, 176, 153, 185],
+  [109, 176, 151, 184, 142], [123, 151, 164, 140, 175], [137, 164, 136, 174, 128],
+  [151, 136, 148, 127, 158], [165, 148, 126, 156, 118], [179, 126, 139, 116, 150],
+  [193, 139, 115, 148, 106], [207, 115, 128, 106, 140], [221, 128, 104, 136, 95],
+  [235, 104, 119, 94, 130], [249, 119, 97, 128, 88], [263, 97, 110, 88, 120],
+  [277, 110, 86, 118, 77], [291, 86, 101, 75, 111], [305, 101, 78, 110, 69],
+  [319, 78, 89, 67, 100], [333, 89, 64, 98, 55],
+]
+
 function RadarDisplay() {
-  return <div className="radar-grid relative mx-auto aspect-square w-full max-w-[360px] overflow-hidden rounded-full border border-white/15 bg-[#080808]">
-    <svg viewBox="0 0 360 360" className="absolute inset-0 h-full w-full" aria-label="Radar sweep visualization" role="img">
-      <circle cx="180" cy="180" r="48"/><circle cx="180" cy="180" r="96"/><circle cx="180" cy="180" r="144"/><line x1="180" y1="14" x2="180" y2="346"/><line x1="14" y1="180" x2="346" y2="180"/>
-      <path d="M180 180 L180 15 A165 165 0 0 1 295 62 Z" className="radar-sweep"/>
-      <circle cx="248" cy="116" r="3.5" className="radar-dot"/><circle cx="120" cy="225" r="3" className="radar-dot"/><circle cx="213" cy="278" r="2.5" className="radar-dot"/>
+  return <div className="radar-grid relative mx-auto aspect-square w-full max-w-[360px] overflow-hidden rounded-full border border-white/20" role="img" aria-label="Tactical market scope over a live candlestick chart with buy and sell order targets">
+    <svg viewBox="0 0 360 360" className="radar-chart absolute inset-0 h-full w-full" aria-hidden="true">
+      <rect width="360" height="360" fill="#090d0c"/>
+      {radarCandles.map(([x, open, close, high, low], index) => {
+        const bullish = close > open
+        const bodyTop = Math.min(open, close)
+        const bodyHeight = Math.max(4, Math.abs(open - close))
+        const color = bullish ? '#57d995' : '#f05c68'
+        return <g key={x} opacity={index % 4 === 0 ? 1 : .82}>
+          <line x1={x} y1={high} x2={x} y2={low} stroke={color} strokeWidth="1.4"/>
+          <rect x={x - 3.2} y={bodyTop} width="6.4" height={bodyHeight} fill={color}/>
+        </g>
+      })}
     </svg>
-    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[.3em] text-white/60">SCANNING</span>
-    <span className="absolute bottom-7 left-1/2 -translate-x-1/2 font-mono text-[9px] tracking-[.2em] text-white/35">RANGE 25.0 KM</span>
+    <svg viewBox="0 0 360 360" className="radar-scope absolute inset-0 h-full w-full" aria-hidden="true">
+      <circle cx="180" cy="180" r="48"/><circle cx="180" cy="180" r="96"/><circle cx="180" cy="180" r="144"/>
+      <line x1="180" y1="14" x2="180" y2="346"/><line x1="14" y1="180" x2="346" y2="180"/>
+    </svg>
+    <div className="radar-energy" aria-hidden="true"/>
+    <span className="scope-blip scope-buy" style={{ left: '69%', top: '32%', animationDelay: '.2s' }} role="img" aria-label="Large buy order target"/>
+    <span className="scope-blip scope-sell" style={{ left: '43%', top: '52%', animationDelay: '.8s' }} role="img" aria-label="Sell order target"/>
+    <span className="scope-blip scope-buy" style={{ left: '33%', top: '63%', animationDelay: '1.2s' }} role="img" aria-label="Buy order target"/>
+    <span className="scope-blip scope-sell" style={{ left: '59%', top: '77%', animationDelay: '1.6s' }} role="img" aria-label="Sell order target"/>
+    <span className="absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 font-mono text-[9px] tracking-[.25em] text-white/70">LOCK / LIVE</span>
+    <span className="absolute bottom-7 left-1/2 z-[3] -translate-x-1/2 font-mono text-[8px] tracking-[.2em] text-white/55">XAU · 25 KM</span>
   </div>
 }
 
-function SettingsRows({ dark, setDark, eye, setEye }: { dark: boolean; setDark: (value: boolean) => void; eye: boolean; setEye: (value: boolean) => void }) {
+function SettingsRows({ dark, setDark, eye, setEye, language, toggleLanguage }: { dark: boolean; setDark: (value: boolean) => void; eye: boolean; setEye: (value: boolean) => void; language: 'EN' | 'KH'; toggleLanguage: () => void }) {
   return <div className="divide-y divide-border">
     <SettingRow icon={dark ? Moon : Sun} title="Appearance" detail={dark ? 'Dark interface' : 'Light interface'}><button className="switch-control" role="switch" aria-checked={dark} aria-label="Dark mode" onClick={() => setDark(!dark)}><span /></button></SettingRow>
     <SettingRow icon={eye ? Shield : Eye} title="Eye protection" detail={eye ? 'Reduced contrast enabled' : 'Standard contrast'}><button className="switch-control" role="switch" aria-checked={eye} aria-label="Eye protection mode" onClick={() => setEye(!eye)}><span /></button></SettingRow>
     <SettingRow icon={Bell} title="Notifications" detail="Critical alerts and execution events"><button className="switch-control" role="switch" aria-checked="true" aria-label="Notifications"><span /></button></SettingRow>
-    <SettingRow icon={Globe2} title="Language" detail="Interface language"><button className="flex items-center gap-2 font-mono text-xs tracking-wider">EN <ChevronDown size={14}/></button></SettingRow>
+    <SettingRow icon={Globe2} title="Language" detail="Interface language"><button onClick={toggleLanguage} className="flex items-center gap-2 font-mono text-xs tracking-wider" aria-label="Change language">{language} <ChevronDown size={14}/></button></SettingRow>
   </div>
 }
 
@@ -56,6 +94,8 @@ export function AtomDashboard() {
   const [eye, setEye] = useState(false)
   const [armed, setArmed] = useState(false)
   const [mobileNav, setMobileNav] = useState(false)
+  const [language, setLanguage] = useState<'EN' | 'KH'>('EN')
+  const toggleLanguage = () => setLanguage((current) => current === 'EN' ? 'KH' : 'EN')
 
   return <div className={`atom-app min-h-screen ${dark ? 'theme-dark' : 'theme-light'} ${eye ? 'eye-protection' : ''}`}>
     <aside className={`sidebar ${mobileNav ? 'sidebar-open' : ''}`}>
@@ -66,15 +106,15 @@ export function AtomDashboard() {
     </aside>
     {mobileNav && <button aria-label="Close navigation overlay" className="nav-overlay md:hidden" onClick={() => setMobileNav(false)}/>}
     <div className="main-shell">
-      <header className="topbar"><div className="flex items-center gap-3"><button className="menu-trigger md:hidden" aria-label="Open navigation" onClick={() => setMobileNav(true)}><Command size={18}/></button><div><p className="font-mono text-[10px] tracking-[.2em] text-muted-foreground">ATOM / OPERATIONS</p><h1 className="mt-1 text-sm font-medium tracking-wide">{activeView.toUpperCase()}</h1></div></div>
-        <div className="flex items-center gap-2"><span className="hidden font-mono text-[9px] tracking-[.16em] text-muted-foreground sm:block">DISPLAY SETTINGS</span><button className={`icon-control ${!dark ? 'control-selected' : ''}`} aria-label="Toggle light and dark mode" aria-pressed={!dark} onClick={() => setDark(!dark)}>{dark ? <Moon size={15}/> : <Sun size={15}/>}</button><button className={`icon-control ${eye ? 'control-selected' : ''}`} aria-label="Toggle eye protection" aria-pressed={eye} onClick={() => setEye(!eye)}>{eye ? <Shield size={15}/> : <Eye size={15}/>}</button><span className="top-divider"/><button className="language-control" aria-label="Select language">EN <ChevronDown size={12}/></button></div>
+      <header className="topbar"><div className="flex items-center gap-3"><button className="menu-trigger md:hidden" aria-label="Open navigation" onClick={() => setMobileNav(true)}><Command size={18}/></button><SignalMark/><div><p className="font-mono text-[10px] tracking-[.2em] text-muted-foreground">ATOM / OPERATIONS</p><h1 className="mt-1 text-sm font-medium tracking-wide">{activeView.toUpperCase()}</h1></div></div>
+        <div className="flex items-center gap-2"><span className="hidden font-mono text-[9px] tracking-[.16em] text-muted-foreground sm:block">DISPLAY SETTINGS</span><button className={`icon-control ${!dark ? 'control-selected' : ''}`} aria-label="Toggle light and dark mode" aria-pressed={!dark} onClick={() => setDark(!dark)}>{dark ? <Moon size={15}/> : <Sun size={15}/>}</button><button className={`icon-control ${eye ? 'control-selected' : ''}`} aria-label="Toggle eye protection" aria-pressed={eye} onClick={() => setEye(!eye)}>{eye ? <Shield size={15}/> : <Eye size={15}/>}</button><span className="top-divider"/><button className="language-control" aria-label={`Switch language to ${language === 'EN' ? 'Khmer' : 'English'}`} aria-pressed={language === 'KH'} onClick={toggleLanguage}>{language} <ChevronDown size={12}/></button></div>
       </header>
       <main className="dashboard-content">
-        {activeView === 'Settings' ? <section className="settings-panel"><div className="section-kicker">PREFERENCES / 01</div><h2 className="mt-2 text-2xl font-medium tracking-tight">System settings</h2><p className="mt-2 text-sm text-muted-foreground">Configure your ATOM CORE environment.</p><div className="mt-8 max-w-2xl"><SettingsRows dark={dark} setDark={setDark} eye={eye} setEye={setEye}/></div></section> : <>
+        {activeView === 'Settings' ? <section className="settings-panel"><div className="section-kicker">PREFERENCES / 01</div><h2 className="mt-2 text-2xl font-medium tracking-tight">System settings</h2><p className="mt-2 text-sm text-muted-foreground">Configure your ATOM CORE environment.</p><div className="mt-8 max-w-2xl"><SettingsRows dark={dark} setDark={setDark} eye={eye} setEye={setEye} language={language} toggleLanguage={toggleLanguage}/></div></section> : <>
           <div className="page-heading"><div><div className="section-kicker">COMMAND CENTER <span className="mx-2 text-border">/</span> LIVE FEED</div><h2 className="mt-2 text-2xl font-medium tracking-tight">Market surveillance</h2><p className="mt-1 text-sm text-muted-foreground">Real-time institutional activity monitoring</p></div><div className="session-badge"><span className="live-dot"/> NY SESSION <span className="text-muted-foreground">·</span> OPEN</div></div>
           <section className="stats-grid" aria-label="Market overview"><Stat label="NET EXPOSURE" value="$284.6M" note="+2.4% from open" icon={ArrowUpRight}/><Stat label="ACTIVE ORDERS" value="1,284" note="Across 18 institutions" icon={Activity}/><Stat label="MARKET PRICE" value="$2,598.42" note="−0.18% / 24H" icon={ArrowDownRight}/><Stat label="SYSTEM LATENCY" value="08.2 ms" note="Nominal · 99.98% uptime" icon={Gauge}/></section>
           <section className="main-grid"><article className="panel radar-panel"><div className="panel-heading"><div><p className="panel-label">01 / SENSOR ARRAY</p><h3 className="mt-1 text-sm font-medium">The Radar</h3></div><button className="mini-status"><span className="live-dot"/> ACTIVE</button></div><div className="radar-wrap"><RadarDisplay/></div><div className="radar-footer"><span>SECTOR 7G · GOLD / XAU</span><span className="font-mono">34° 03′ N / 118° 15′ W</span></div></article>
-            <article className="panel alerts-panel"><div className="panel-heading"><div><p className="panel-label">02 / INSTITUTIONAL ACTIVITY</p><h3 className="mt-1 text-sm font-medium">Live alerts feed</h3></div><button className="feed-count">05 NEW <ChevronDown size={12}/></button></div><div className="alerts-list">{alerts.map((alert, index) => <div className="alert-row" key={alert.bank}><div className={`alert-mark ${alert.side}`}>{alert.side === 'buy' ? <ArrowUpRight size={14}/> : <ArrowDownRight size={14}/>}</div><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-x-2 gap-y-1"><span className="alert-bank">[{alert.bank}]</span><span className="alert-type">{alert.type}</span></div><p className="mt-1 font-mono text-xs text-foreground/80">{alert.amount} <span className="text-muted-foreground">at</span> {alert.price}</p><p className="mt-1 font-mono text-[9px] tracking-wide text-muted-foreground">ORDER REF / 00{index + 291}8</p></div><time className="shrink-0 font-mono text-[9px] text-muted-foreground">{alert.time}</time></div>)}</div><div className="feed-footer"><span>STREAMING FROM 18 VENUES</span><button>VIEW ALL <ArrowUpRight size={11}/></button></div></article></section>
+            <article className="panel alerts-panel"><div className="panel-heading"><div><p className="panel-label">02 / INSTITUTIONAL ACTIVITY</p><h3 className="mt-1 text-sm font-medium">Live alerts feed</h3></div><button className="feed-count">05 NEW <ChevronDown size={12}/></button></div><div className="alerts-list">{alerts.map((alert, index) => <div className="alert-row" key={alert.bank}><div className={`alert-mark ${alert.side}`}>{alert.side === 'buy' ? <ArrowUpRight size={14}/> : <ArrowDownRight size={14}/>}</div><div className="min-w-0 flex-1"><p className={`alert-message ${language === 'KH' ? 'alert-message-khmer' : ''}`} lang={language === 'KH' ? 'km' : 'en'}>{language === 'KH' ? `🚨 [${alert.bank}] ${alert.khmer} ${alert.amount} នៅតម្លៃ ${alert.price}` : `[${alert.bank}] ${alert.type} ${alert.amount} at ${alert.price}`}</p><p className="mt-1 font-mono text-[9px] tracking-wide text-muted-foreground">ORDER REF / 00{index + 291}8</p></div><time className="shrink-0 font-mono text-[9px] text-muted-foreground">{alert.time}</time></div>)}</div><div className="feed-footer"><span>STREAMING FROM 18 VENUES</span><button>VIEW ALL <ArrowUpRight size={11}/></button></div></article></section>
           <section className="kill-section"><div className="kill-copy"><div className="flex items-center gap-2"><Shield size={15}/><span className="panel-label">EMERGENCY PROTOCOL / LEVEL 4</span></div><p className="mt-2 text-xs text-muted-foreground">Immediately liquidate all open positions across connected venues.</p></div><button className={`kill-button ${armed ? 'kill-armed' : ''}`} onClick={() => setArmed(!armed)}><Zap size={17} fill="currentColor"/><span>{armed ? 'CONFIRM — CLOSE ALL POSITIONS' : 'ATOMIC SWITCH — CLOSE ALL POSITIONS'}</span><span className="kill-key">{armed ? 'ARMED' : '⌘ + ⇧ + X'}</span></button></section>
         </>}
         <footer className="page-footer"><span>ATOM CORE TERMINAL <span className="mx-2">/</span> CLASSIFICATION: RESTRICTED</span><span>BUILD 4.08.12 <span className="mx-2">·</span> ENCRYPTED LINK <span className="live-dot ml-2 inline-block"/></span></footer>

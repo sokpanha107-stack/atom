@@ -60,10 +60,27 @@ button { cursor: pointer; }
 .mini-status { padding: 5px 7px; font-size: 8px; }
 .radar-panel { display: flex; flex-direction: column; }
 .radar-wrap { display: grid; flex: 1; place-items: center; padding: 20px 16px; }
-.radar-grid { background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px; }
-.radar-grid svg circle, .radar-grid svg line { fill: none; stroke: #ffffff1c; stroke-width: 1; }
-.radar-grid svg .radar-sweep { fill: #ffffff0b; stroke: #ffffff6b; stroke-width: 1; transform-origin: 180px 180px; animation: radar-rotate 7s linear infinite; }
-.radar-grid svg .radar-dot { fill: #ddd; stroke: #fff7; filter: drop-shadow(0 0 4px #fff); }
+.radar-grid { isolation: isolate; background: #090d0c; }
+.radar-chart { z-index: 0; }
+.radar-scope { z-index: 1; }
+.radar-scope circle { fill: none; stroke: #e8f4eb68; stroke-width: 1; }
+.radar-scope circle:first-child { stroke: #d8f5df88; }
+.radar-scope line { stroke: #effff037; stroke-width: 1; }
+.radar-energy { position: absolute; z-index: 2; inset: -30%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 245deg, #20ff6b08 264deg, #20ff6b22 291deg, #20ff6b60 322deg, #8affb58c 347deg, transparent 360deg); filter: blur(14px) drop-shadow(0 0 15px #00ff6252); animation: radar-rotate 7s linear infinite; pointer-events: none; mix-blend-mode: screen; }
+.radar-energy::after { content: ""; position: absolute; inset: 29%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 266deg, #3cff7a08 290deg, #46ff761b 324deg, #9dffb747 350deg, transparent 360deg); filter: blur(8px); }
+.scope-blip { position: absolute; z-index: 3; width: 11px; height: 11px; transform: translate(-50%, -50%); border: 2px solid #f3fff8; border-radius: 50%; animation: scope-arrival .55s cubic-bezier(.2,.75,.25,1) both, scope-blink 1.8s ease-in-out 1s infinite; }
+.scope-blip::before, .scope-blip::after { content: ""; position: absolute; inset: -5px; border: 1px solid currentColor; border-radius: 50%; animation: scope-ripple 2.4s ease-out infinite; }
+.scope-blip::after { animation-delay: 1.2s; }
+.scope-buy { color: #49ff9b; background: #27e982; box-shadow: 0 0 7px 2px #20ff89, 0 0 18px 5px #19ec786e; }
+.scope-sell { color: #ff5366; background: #ff5366; box-shadow: 0 0 7px 2px #ff354b, 0 0 18px 5px #ff223c80; }
+@keyframes scope-arrival { from { opacity: 0; scale: .35; } to { opacity: 1; scale: 1; } }
+@keyframes scope-blink { 0%, 100% { filter: brightness(.9); } 50% { filter: brightness(1.45); } }
+@keyframes scope-ripple { 0% { opacity: .8; transform: scale(.5); } 100% { opacity: 0; transform: scale(2.8); } }
+.signal-mark { width: 30px; height: 30px; flex: 0 0 auto; color: var(--foreground); }
+.alert-message { font-size: 10px; line-height: 1.7; letter-spacing: .015em; color: var(--foreground); }
+.alert-message-khmer { font-family: var(--font-geist-sans), "Noto Sans Khmer", sans-serif; font-size: 13px; line-height: 1.75; letter-spacing: 0; }
+.alert-row { align-items: flex-start; }
+
 @keyframes radar-rotate { to { transform: rotate(360deg); } }
 .radar-footer { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid var(--border); padding: 11px 16px; color: var(--muted-foreground); font-size: 8px; letter-spacing: .07em; }
 .feed-count { display: flex; align-items: center; gap: 5px; border: 1px solid var(--border); padding: 6px 7px; font-size: 8px; letter-spacing: .08em; }
