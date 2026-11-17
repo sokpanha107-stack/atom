@@ -35,17 +35,43 @@ function SignalMark() {
   </svg>
 }
 
+const radarCandles = [
+  [25, 228, 194, 240, 182], [39, 196, 211, 188, 224], [53, 210, 181, 220, 172],
+  [67, 181, 194, 170, 205], [81, 194, 162, 202, 154], [95, 163, 176, 153, 185],
+  [109, 176, 151, 184, 142], [123, 151, 164, 140, 175], [137, 164, 136, 174, 128],
+  [151, 136, 148, 127, 158], [165, 148, 126, 156, 118], [179, 126, 139, 116, 150],
+  [193, 139, 115, 148, 106], [207, 115, 128, 106, 140], [221, 128, 104, 136, 95],
+  [235, 104, 119, 94, 130], [249, 119, 97, 128, 88], [263, 97, 110, 88, 120],
+  [277, 110, 86, 118, 77], [291, 86, 101, 75, 111], [305, 101, 78, 110, 69],
+  [319, 78, 89, 67, 100], [333, 89, 64, 98, 55],
+]
+
 function RadarDisplay() {
-  return <div className="radar-grid relative mx-auto aspect-square w-full max-w-[360px] overflow-hidden rounded-full border border-white/15 bg-[#080808]" aria-label="Live market radar">
-    <div className="radar-energy" aria-hidden="true" />
-    <svg viewBox="0 0 360 360" className="absolute inset-0 h-full w-full" aria-hidden="true">
-      <circle cx="180" cy="180" r="48"/><circle cx="180" cy="180" r="96"/><circle cx="180" cy="180" r="144"/><line x1="180" y1="14" x2="180" y2="346"/><line x1="14" y1="180" x2="346" y2="180"/>
+  return <div className="radar-grid relative mx-auto aspect-square w-full max-w-[360px] overflow-hidden rounded-full border border-white/20" role="img" aria-label="Tactical market scope over a live candlestick chart with buy and sell order targets">
+    <svg viewBox="0 0 360 360" className="radar-chart absolute inset-0 h-full w-full" aria-hidden="true">
+      <rect width="360" height="360" fill="#090d0c"/>
+      {radarCandles.map(([x, open, close, high, low], index) => {
+        const bullish = close > open
+        const bodyTop = Math.min(open, close)
+        const bodyHeight = Math.max(4, Math.abs(open - close))
+        const color = bullish ? '#57d995' : '#f05c68'
+        return <g key={x} opacity={index % 4 === 0 ? 1 : .82}>
+          <line x1={x} y1={high} x2={x} y2={low} stroke={color} strokeWidth="1.4"/>
+          <rect x={x - 3.2} y={bodyTop} width="6.4" height={bodyHeight} fill={color}/>
+        </g>
+      })}
     </svg>
-    <span className="radar-target radar-target-large" style={{ left: '69%', top: '32%', animationDelay: '0s' }} aria-label="Large order target">$</span>
-    <span className="radar-target radar-target-normal" style={{ left: '33%', top: '63%', animationDelay: '.7s' }} aria-label="Order target">$</span>
-    <span className="radar-target radar-target-normal" style={{ left: '59%', top: '77%', animationDelay: '1.3s' }} aria-label="Order target">$</span>
-    <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[.3em] text-white/60">SCANNING</span>
-    <span className="absolute bottom-7 left-1/2 -translate-x-1/2 font-mono text-[9px] tracking-[.2em] text-white/35">RANGE 25.0 KM</span>
+    <svg viewBox="0 0 360 360" className="radar-scope absolute inset-0 h-full w-full" aria-hidden="true">
+      <circle cx="180" cy="180" r="48"/><circle cx="180" cy="180" r="96"/><circle cx="180" cy="180" r="144"/>
+      <line x1="180" y1="14" x2="180" y2="346"/><line x1="14" y1="180" x2="346" y2="180"/>
+    </svg>
+    <div className="radar-energy" aria-hidden="true"/>
+    <span className="scope-blip scope-buy" style={{ left: '69%', top: '32%', animationDelay: '.2s' }} role="img" aria-label="Large buy order target"/>
+    <span className="scope-blip scope-sell" style={{ left: '43%', top: '52%', animationDelay: '.8s' }} role="img" aria-label="Sell order target"/>
+    <span className="scope-blip scope-buy" style={{ left: '33%', top: '63%', animationDelay: '1.2s' }} role="img" aria-label="Buy order target"/>
+    <span className="scope-blip scope-sell" style={{ left: '59%', top: '77%', animationDelay: '1.6s' }} role="img" aria-label="Sell order target"/>
+    <span className="absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 font-mono text-[9px] tracking-[.25em] text-white/70">LOCK / LIVE</span>
+    <span className="absolute bottom-7 left-1/2 z-[3] -translate-x-1/2 font-mono text-[8px] tracking-[.2em] text-white/55">XAU · 25 KM</span>
   </div>
 }
 

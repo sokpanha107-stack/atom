@@ -60,15 +60,22 @@ button { cursor: pointer; }
 .mini-status { padding: 5px 7px; font-size: 8px; }
 .radar-panel { display: flex; flex-direction: column; }
 .radar-wrap { display: grid; flex: 1; place-items: center; padding: 20px 16px; }
-.radar-grid { isolation: isolate; background: #080808; }
-.radar-grid svg circle, .radar-grid svg line { fill: none; stroke: #ffffff1c; stroke-width: 1; }
-.radar-energy { position: absolute; z-index: 1; inset: -28%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 242deg, #20ff6b08 260deg, #20ff6b24 286deg, #20ff6b66 318deg, #67ff9eac 345deg, transparent 360deg); filter: blur(15px) drop-shadow(0 0 17px #00ff623d); animation: radar-rotate 7s linear infinite; pointer-events: none; }
-.radar-energy::after { content: ""; position: absolute; inset: 26%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 265deg, #3cff7a09 286deg, #46ff761c 324deg, #9dffb74c 350deg, transparent 360deg); filter: blur(8px); }
-.radar-target { position: absolute; z-index: 2; transform: translate(-50%, -50%); font-family: var(--font-geist-mono), monospace; font-weight: 700; line-height: 1; opacity: 0; animation: target-arrival .65s cubic-bezier(.2,.75,.25,1) forwards, target-pulse 2.4s ease-in-out 1s infinite; }
-.radar-target-large { color: #ff4e5d; font-size: 21px; text-shadow: 0 0 7px #ff203c, 0 0 18px #ff203c88; }
-.radar-target-normal { color: #f0d84c; font-size: 16px; text-shadow: 0 0 7px #f0d84c, 0 0 16px #f0d84c66; }
-@keyframes target-arrival { from { opacity: 0; transform: translate(-50%, -18%); } to { opacity: 1; transform: translate(-50%, -50%); } }
-@keyframes target-pulse { 0%, 100% { filter: brightness(.85); } 50% { filter: brightness(1.35); } }
+.radar-grid { isolation: isolate; background: #090d0c; }
+.radar-chart { z-index: 0; }
+.radar-scope { z-index: 1; }
+.radar-scope circle { fill: none; stroke: #e8f4eb68; stroke-width: 1; }
+.radar-scope circle:first-child { stroke: #d8f5df88; }
+.radar-scope line { stroke: #effff037; stroke-width: 1; }
+.radar-energy { position: absolute; z-index: 2; inset: -30%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 245deg, #20ff6b08 264deg, #20ff6b22 291deg, #20ff6b60 322deg, #8affb58c 347deg, transparent 360deg); filter: blur(14px) drop-shadow(0 0 15px #00ff6252); animation: radar-rotate 7s linear infinite; pointer-events: none; mix-blend-mode: screen; }
+.radar-energy::after { content: ""; position: absolute; inset: 29%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 266deg, #3cff7a08 290deg, #46ff761b 324deg, #9dffb747 350deg, transparent 360deg); filter: blur(8px); }
+.scope-blip { position: absolute; z-index: 3; width: 11px; height: 11px; transform: translate(-50%, -50%); border: 2px solid #f3fff8; border-radius: 50%; animation: scope-arrival .55s cubic-bezier(.2,.75,.25,1) both, scope-blink 1.8s ease-in-out 1s infinite; }
+.scope-blip::before, .scope-blip::after { content: ""; position: absolute; inset: -5px; border: 1px solid currentColor; border-radius: 50%; animation: scope-ripple 2.4s ease-out infinite; }
+.scope-blip::after { animation-delay: 1.2s; }
+.scope-buy { color: #49ff9b; background: #27e982; box-shadow: 0 0 7px 2px #20ff89, 0 0 18px 5px #19ec786e; }
+.scope-sell { color: #ff5366; background: #ff5366; box-shadow: 0 0 7px 2px #ff354b, 0 0 18px 5px #ff223c80; }
+@keyframes scope-arrival { from { opacity: 0; scale: .35; } to { opacity: 1; scale: 1; } }
+@keyframes scope-blink { 0%, 100% { filter: brightness(.9); } 50% { filter: brightness(1.45); } }
+@keyframes scope-ripple { 0% { opacity: .8; transform: scale(.5); } 100% { opacity: 0; transform: scale(2.8); } }
 .signal-mark { width: 30px; height: 30px; flex: 0 0 auto; color: var(--foreground); }
 .alert-message { font-size: 10px; line-height: 1.7; letter-spacing: .015em; color: var(--foreground); }
 .alert-message-khmer { font-family: var(--font-geist-sans), "Noto Sans Khmer", sans-serif; font-size: 13px; line-height: 1.75; letter-spacing: 0; }
