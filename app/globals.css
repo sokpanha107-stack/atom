@@ -60,10 +60,20 @@ button { cursor: pointer; }
 .mini-status { padding: 5px 7px; font-size: 8px; }
 .radar-panel { display: flex; flex-direction: column; }
 .radar-wrap { display: grid; flex: 1; place-items: center; padding: 20px 16px; }
-.radar-grid { background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px; }
+.radar-grid { isolation: isolate; background: #080808; }
 .radar-grid svg circle, .radar-grid svg line { fill: none; stroke: #ffffff1c; stroke-width: 1; }
-.radar-grid svg .radar-sweep { fill: #ffffff0b; stroke: #ffffff6b; stroke-width: 1; transform-origin: 180px 180px; animation: radar-rotate 7s linear infinite; }
-.radar-grid svg .radar-dot { fill: #ddd; stroke: #fff7; filter: drop-shadow(0 0 4px #fff); }
+.radar-energy { position: absolute; z-index: 1; inset: -28%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 242deg, #20ff6b08 260deg, #20ff6b24 286deg, #20ff6b66 318deg, #67ff9eac 345deg, transparent 360deg); filter: blur(15px) drop-shadow(0 0 17px #00ff623d); animation: radar-rotate 7s linear infinite; pointer-events: none; }
+.radar-energy::after { content: ""; position: absolute; inset: 26%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 265deg, #3cff7a09 286deg, #46ff761c 324deg, #9dffb74c 350deg, transparent 360deg); filter: blur(8px); }
+.radar-target { position: absolute; z-index: 2; transform: translate(-50%, -50%); font-family: var(--font-geist-mono), monospace; font-weight: 700; line-height: 1; opacity: 0; animation: target-arrival .65s cubic-bezier(.2,.75,.25,1) forwards, target-pulse 2.4s ease-in-out 1s infinite; }
+.radar-target-large { color: #ff4e5d; font-size: 21px; text-shadow: 0 0 7px #ff203c, 0 0 18px #ff203c88; }
+.radar-target-normal { color: #f0d84c; font-size: 16px; text-shadow: 0 0 7px #f0d84c, 0 0 16px #f0d84c66; }
+@keyframes target-arrival { from { opacity: 0; transform: translate(-50%, -18%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+@keyframes target-pulse { 0%, 100% { filter: brightness(.85); } 50% { filter: brightness(1.35); } }
+.signal-mark { width: 30px; height: 30px; flex: 0 0 auto; color: var(--foreground); }
+.alert-message { font-size: 10px; line-height: 1.7; letter-spacing: .015em; color: var(--foreground); }
+.alert-message-khmer { font-family: var(--font-geist-sans), "Noto Sans Khmer", sans-serif; font-size: 13px; line-height: 1.75; letter-spacing: 0; }
+.alert-row { align-items: flex-start; }
+
 @keyframes radar-rotate { to { transform: rotate(360deg); } }
 .radar-footer { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid var(--border); padding: 11px 16px; color: var(--muted-foreground); font-size: 8px; letter-spacing: .07em; }
 .feed-count { display: flex; align-items: center; gap: 5px; border: 1px solid var(--border); padding: 6px 7px; font-size: 8px; letter-spacing: .08em; }
